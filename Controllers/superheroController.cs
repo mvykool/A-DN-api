@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using superhero_api.Data;
 
 namespace superhero_api.Controllers
 {
@@ -7,19 +9,17 @@ namespace superhero_api.Controllers
     [ApiController]
     public class superheroController : ControllerBase
     {
+        private readonly DataContext _context;
+        
+        public superheroController(DataContext context)
+        {
+            _context = context;
+        }
+
         [HttpGet]
         public async Task<ActionResult<List<superhero>>> GetSuperHero()
         {
-            return new List<superhero>
-            {
-                new superhero
-                {
-                    Name = "batman",
-                    FirstName = "bruce",
-                    LastName = "wayne",
-                    Place = "gotham"
-                }
-            };
+            return Ok(await _context.Superheroes.ToListAsync());
         }
     }
 }
